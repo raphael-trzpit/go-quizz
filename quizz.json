@@ -1,0 +1,37 @@
+{
+    "quizz": {
+        "description": "my first quizz",
+        "questions": [
+            {
+                "text": "Question 1",
+                "answers": [
+                    {
+                        "text": "answer 1",
+                        "true": true
+                    },
+                    {
+                        "text": "answer 2",
+                        "true": false
+                    },
+                    {
+                        "text": "answer 3",
+                        "true": true
+                    }
+                ]
+            },
+            {
+                "text": "Question 2",
+                "answers": [
+                    {
+                        "text": "answer 1",
+                        "true": false
+                    },
+                    {
+                        "text": "answer 2",
+                        "true": true
+                    }
+                ]
+            }
+        ]
+    }
+}
