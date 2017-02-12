@@ -7,9 +7,6 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"sort"
-	"strconv"
-	"strings"
 )
 
 func main() {
@@ -40,6 +37,7 @@ func main() {
 		case 0 == i:
 			fmt.Print("You must answer the question !")
 		case err != nil:
+			fmt.Print(i)
 			log.Fatal(err)
 		default:
 			valid := question.Answer(response)
@@ -67,57 +65,4 @@ type Quizz struct {
 // QuizzConfig is a config for a quizz.
 type QuizzConfig struct {
 	Quizz Quizz `json:"quizz"`
-}
-
-// Question is a question.
-type Question struct {
-	Text    string   `json:"text"`
-	Answers []Answer `json:"answers"`
-}
-
-// Answer is an answer
-type Answer struct {
-	Text string `json:"text"`
-	True bool   `json:"true"`
-}
-
-// Ask a question.
-func (q Question) Ask() string {
-	return q.Text
-}
-
-// GiveChoices for a question
-func (q Question) GiveChoices() []string {
-	choices := make([]string, len(q.Answers))
-	for i, answer := range q.Answers {
-		choices[i] = fmt.Sprintf("%d: %s", i, answer.Text)
-	}
-	return choices
-}
-
-// GiveAnswers for a question
-func (q Question) GiveAnswers() []string {
-	answers := make([]string, 0)
-	for _, answer := range q.Answers {
-		if !answer.True {
-			continue
-		}
-		answers = append(answers, answer.Text)
-	}
-	return answers
-}
-
-// Answer a question
-func (q Question) Answer(answer string) bool {
-	answers := strings.Split(answer, " ")
-	sort.Strings(answers)
-	for i, answer := range q.Answers {
-		if answer.True && sort.SearchStrings(answers, strconv.Itoa(i)) > len(answers) {
-			return false
-		}
-		if !answer.True && sort.SearchStrings(answers, strconv.Itoa(i)) <= len(answers) {
-			return false
-		}
-	}
-	return true
 }
