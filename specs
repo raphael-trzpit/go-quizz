@@ -1,0 +1,22 @@
+test:
+ - questionCollection
+ - answerCollection
+
+testCopy
+ -> answerQuestion(question, answer) : err
+ -> questions() : questionCollection
+ -> answers() : answerCollection
+ -> score() : score
+
+
+
+question
+ -> ask a question
+ -> answer a question
+
+q1:
+ v ou f
+q2:
+ v ou f
+q3:
+ v
