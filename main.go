@@ -1,59 +1,44 @@
 package main
 
-// func main() {
-// 	var file = flag.String("file", "quizz.json", "Filepath to the json file defining the quizz.")
-// 	flag.Parse()
-// 	raw, err := ioutil.ReadFile(*file)
-// 	if err != nil {
-// 		log.Fatalf("Can't read file %s : %s", *file, err.Error())
-// 	}
-// 	var quizzConfig QuizzConfig
-// 	err = json.Unmarshal(raw, &quizzConfig)
-// 	if err != nil {
-// 		log.Fatalf("Invalid json file %s : %s", *file, err.Error())
-// 	}
-// 	quizz := quizzConfig.Quizz
+import (
+	"fmt"
+	"log"
+	"os"
 
-// 	// Questions.
-// 	for i, question := range quizz.Questions {
-// 		fmt.Printf("Question %d:\n", i)
-// 		fmt.Println(question.Ask())
-// 		for _, choice := range question.GiveChoices() {
-// 			fmt.Println(choice)
-// 		}
+	"github.com/raphael-trzpit/go-quizz/quizz"
+)
 
-// 		var response string
-// 		i, err := fmt.Fscanln(os.Stdin, &response)
-// 		switch {
-// 		case 0 == i:
-// 			fmt.Print("You must answer the question !")
-// 		case err != nil:
-// 			fmt.Print(i)
-// 			log.Fatal(err)
-// 		default:
-// 			valid := question.Answer(response)
-// 			if !valid {
-// 				fmt.Println("Wrong !")
-// 				fmt.Println("Good answers were :")
-// 				for _, answer := range question.GiveAnswers() {
-// 					fmt.Println(answer)
-// 				}
-// 			} else {
-// 				fmt.Println("Good job !")
-// 			}
-// 		}
-// 	}
+func main() {
+	var questions = []quizz.Question{
+		quizz.NewTrueFalse("Jaune est une couleur", true),
+		quizz.NewTrueFalse("Arbre est une couleur", false),
+	}
 
-// }
+	for _, q := range questions {
+		quizz.WriteQuestion(q, os.Stdout)
 
-// // Quizz is a quizz.
-// type Quizz struct {
-// 	Description string     `json:"description"`
-// 	Questions   []Question `json:"questions"`
-// 	Answers     []Answer   `json:"answers"`
-// }
+		var response string
+		i, err := fmt.Fscanln(os.Stdin, &response)
+		switch {
+		case 0 == i:
+			fmt.Print("You must answer the question !")
+		case err != nil:
+			fmt.Print(i)
+			log.Fatal(err)
+		default:
+			score, err := q.Score(response)
+			if err != nil {
+				fmt.Println("Error : " + err.Error())
+			}
 
-// // QuizzConfig is a config for a quizz.
-// type QuizzConfig struct {
-// 	Quizz Quizz `json:"quizz"`
-// }
+			if score == 1 {
+				fmt.Println("Good job !")
+			} else {
+				fmt.Println("Error !")
+				fmt.Println("The solution was : ")
+				quizz.WriteQuestionSolution(q, os.Stdout)
+			}
+		}
+	}
+
+}

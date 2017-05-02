@@ -27,15 +27,6 @@ func WriteQuestionSolution(q Question, w io.Writer) error {
 	return tmpl.Execute(w, q)
 }
 
-type QuestionCollection struct {
-	Questions []Question
-}
-
-type QuizzQuestion struct {
-	Question *Question
-	Answer   string
-}
-
 type TrueFalse struct {
 	Text             string
 	Answer           bool
